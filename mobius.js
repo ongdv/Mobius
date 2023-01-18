@@ -18,47 +18,46 @@ var fs = require('fs');
 
 var conf = {};
 try {
-    conf = JSON.parse(fs.readFileSync('conf.json', 'utf8'));
-}
-catch (e) {
-    conf.csebaseport = "7579";
-    conf.dbpass = "dksdlfduq2";
-    fs.writeFileSync('conf.json', JSON.stringify(conf, null, 4), 'utf8');
+  conf = JSON.parse(fs.readFileSync('conf.json', 'utf8'));
+  console.log(conf);
+} catch (e) {
+  conf.csebaseport = '7579';
+  conf.dbpass = 'dksdlfduq2';
+  fs.writeFileSync('conf.json', JSON.stringify(conf, null, 4), 'utf8');
 }
 
-global.defaultbodytype      = 'json';
+global.defaultbodytype = 'json';
 
 // my CSE information
-global.usecsetype           = 'in'; // select 'in' or 'mn' or asn'
-global.usecsebase           = 'Mobius';
-global.usecseid             = '/Mobius2';
-global.usecsebaseport       = conf.csebaseport;
+global.usecsetype = 'in'; // select 'in' or 'mn' or asn'
+global.usecsebase = 'Mobius';
+global.usecseid = '/Mobius2';
+global.usecsebaseport = conf.csebaseport;
 
-global.usedbhost            = 'localhost';
-global.usedbpass            = conf.dbpass;
+global.usedbhost = '127.0.0.1';
+global.useduser = conf.dbuser;
+global.usedbpass = conf.dbpass;
 
+global.usepxywsport = '7577';
+global.usepxymqttport = '7578';
 
-global.usepxywsport         = '7577';
-global.usepxymqttport       = '7578';
+global.use_sgn_man_port = '7599';
+global.use_cnt_man_port = '7583';
+global.use_hit_man_port = '7594';
 
-global.use_sgn_man_port     = '7599';
-global.use_cnt_man_port     = '7583';
-global.use_hit_man_port     = '7594';
+global.usetsagentport = '7582';
 
-global.usetsagentport       = '7582';
+global.use_mqtt_broker = 'localhost'; // mqttbroker for mobius
 
-global.use_mqtt_broker      = 'localhost'; // mqttbroker for mobius
-
-global.use_secure           = 'disable';
-global.use_mqtt_port        = '1883';
-if(use_secure === 'enable') {
-    use_mqtt_port           = '8883';
+global.use_secure = 'disable';
+global.use_mqtt_port = '1883';
+if (use_secure === 'enable') {
+  use_mqtt_port = '8883';
 }
 
 global.useaccesscontrolpolicy = 'disable';
 
 global.wdt = require('./wdt');
-
 
 global.allowed_ae_ids = [];
 //allowed_ae_ids.push('ryeubi');
@@ -66,7 +65,7 @@ global.allowed_ae_ids = [];
 global.allowed_app_ids = [];
 //allowed_app_ids.push('APP01');
 
-global.usesemanticbroker    = '10.10.202.114';
+global.usesemanticbroker = '10.10.202.114';
 
 global.uservi = '2a';
 

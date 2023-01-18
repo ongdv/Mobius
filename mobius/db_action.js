@@ -20,24 +20,22 @@ var mysql_pool = null;
 
 //var _this = this;
 
-
 exports.connect = function (host, port, user, password, callback) {
-    mysql_pool = mysql.createPool({
-        host: host,
-        port: port,
-        user: user,
-        password: password,
-        database: 'mobiusdb',
-        connectionLimit: 100,
-        waitForConnections: true,
-        debug: false,
-        acquireTimeout: 50000,
-        queueLimit: 0
-    });
+  mysql_pool = mysql.createPool({
+    host: host,
+    port: port,
+    user: user,
+    password: password,
+    database: 'mobiusdb',
+    connectionLimit: 100,
+    waitForConnections: true,
+    debug: false,
+    acquireTimeout: 50000,
+    queueLimit: 0,
+  });
 
-    callback('1');
+  callback('1');
 };
-
 
 // function executeQuery(pool, query, callback) {
 //     pool.getConnection(function (err, connection) {
@@ -60,50 +58,48 @@ exports.connect = function (host, port, user, password, callback) {
 // }
 
 function executeQuery(pool, query, connection, callback) {
-    connection.query({sql:query, timeout:60000}, function (err, rows, fields) {
-        if (err) {
-            return callback(err, null);
-        }
-        return callback(null, rows);
-    });
+  connection.query(
+    { sql: query, timeout: 60000 },
+    function (err, rows, fields) {
+      if (err) {
+        return callback(err, null);
+      }
+      return callback(null, rows);
+    }
+  );
 }
 
-exports.getConnection = function(callback) {
-    if(mysql_pool == null) {
-        console.error("mysql is not connected");
-        callback(true, "mysql is not connected");
-        return '0';
-    }
+exports.getConnection = function (callback) {
+  if (mysql_pool == null) {
+    console.error('mysql is not connected');
+    callback(true, 'mysql is not connected');
+    return '0';
+  }
 
-    mysql_pool.getConnection((err, connection) => {
-        if (err) {
-            callback('500-5');
-        }
-        else {
-            if (connection) {
-                callback('200', connection);
-            }
-            else {
-                callback('500-5');
-            }
-        }
-    });
+  mysql_pool.getConnection((err, connection) => {
+    if (err) {
+      callback('500-5');
+    } else {
+      if (connection) {
+        callback('200', connection);
+      } else {
+        callback('500-5');
+      }
+    }
+  });
 };
 
-exports.getResult = function(query, connection, callback) {
-    if(mysql_pool == null) {
-        console.error("mysql is not connected");
-        return '0';
+exports.getResult = function (query, connection, callback) {
+  if (mysql_pool == null) {
+    console.error('mysql is not connected');
+    return '0';
+  }
+
+  executeQuery(mysql_pool, query, connection, (err, rows) => {
+    if (!err) {
+      callback(null, rows);
+    } else {
+      callback(true, err);
     }
-
-    executeQuery(mysql_pool, query, connection, (err, rows) => {
-        if (!err) {
-            callback(null, rows);
-        }
-        else {
-            callback(true, err);
-        }
-    });
+  });
 };
-
-
